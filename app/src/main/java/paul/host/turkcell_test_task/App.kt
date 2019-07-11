@@ -1,7 +1,7 @@
 package paul.host.turkcell_test_task
 
 import android.app.Application
-import paul.host.navico_testtask.di.AppComponent
+import paul.host.turkcell_test_task.di.AppComponent
 import timber.log.Timber
 
 class App : Application() {
