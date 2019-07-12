@@ -4,7 +4,8 @@ import dagger.Component
 import paul.host.turkcell_test_task.App
 import paul.host.navico_testtask.di.module.AppModule
 import paul.host.navico_testtask.di.module.NetworkModule
-import paul.host.navico_testtask.di.module.RepositoryModule
+import paul.host.turkcell_test_task.di.module.DataModule
+import paul.host.turkcell_test_task.ui.fragment.DetailsFragment
 import paul.host.turkcell_test_task.ui.fragment.ListFragment
 import javax.inject.Singleton
 
@@ -14,18 +15,19 @@ import javax.inject.Singleton
     modules = [
         AppModule::class,
         NetworkModule::class,
-        RepositoryModule::class
+        DataModule::class
     ]
 )
 interface AppComponent {
     fun inject(fragment: ListFragment)
+    fun inject(fragment: DetailsFragment)
 
     object Initializer {
         fun init(app: App): AppComponent {
             return DaggerAppComponent.builder()
                 .appModule(AppModule(app))
                 .networkModule(NetworkModule())
-                .repositoryModule(RepositoryModule())
+                .dataModule(DataModule())
                 .build()
         }
     }

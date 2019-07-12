@@ -1,12 +1,25 @@
-package paul.host.navico_testtask.data.repasitory
+package paul.host.turkcell_test_task.data.repasitory
 
-import io.reactivex.Single
+import io.reactivex.Flowable
+import paul.host.turkcell_test_task.data.datasourse.ConnectionDataSource
+import paul.host.turkcell_test_task.data.datasourse.DataBaseDataSource
+import paul.host.turkcell_test_task.data.datasourse.NetworkDataSourse
 import paul.host.turkcell_test_task.data.model.Product
-import paul.host.turkcell_test_task.data.network.ApiService
 import javax.inject.Inject
 
-class Repository @Inject constructor(private val api: ApiService) {
-    fun products(): Single<List<Product>> = api.products().map { it.products }
+class Repository @Inject constructor(
+    private val api: NetworkDataSourse,
+    private val db: DataBaseDataSource,
+    private val connection: ConnectionDataSource
+) {
+    fun products(): Flowable<List<Product>> = hasConnection().flatMapSingle {
+        if (it) api.products() else db.products().firstOrError()
+    }
 
-    fun produt(id: String) = api.product(id)
+    fun product(id: String): Flowable<Product> = hasConnection().flatMapSingle {
+        if (it) api.product(id) else db.product(id).firstOrError()
+    }
+
+    private fun hasConnection() = connection.hasConnection()
+
 }

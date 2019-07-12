@@ -21,6 +21,17 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == "com.android.support") {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion "28.+"
+            }
+        }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -40,6 +51,7 @@ dependencies {
     //RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
+    implementation 'com.jakewharton.rx2:replaying-share:2.1.0'
 
     //Dagger
     implementation 'com.google.dagger:dagger:2.14.1'
@@ -55,9 +67,14 @@ dependencies {
     //Gson
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    //Okhttp
+    //OkHttp
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+
+    //Room
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
+    implementation "android.arch.persistence.room:rxjava2:1.1.1"
 
     //Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
