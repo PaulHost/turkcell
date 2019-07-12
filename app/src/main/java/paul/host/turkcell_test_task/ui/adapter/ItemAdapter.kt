@@ -30,6 +30,7 @@ class ItemAdapter(
             holder.setImage(item.image)
             holder.name.text = item.name
             holder.price.text = item.price.toString()
+            holder.itemView.setOnClickListener { listener.goDetails(item.id) }
         }
     }
 

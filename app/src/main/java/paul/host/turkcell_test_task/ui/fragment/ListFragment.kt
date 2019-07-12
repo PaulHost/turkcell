@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import paul.host.navico_testtask.data.repasitory.Repository
+import paul.host.turkcell_test_task.data.repasitory.Repository
 import paul.host.turkcell_test_task.App
 import paul.host.turkcell_test_task.R
 import paul.host.turkcell_test_task.ui.adapter.ItemAdapter
@@ -41,8 +41,9 @@ class ListFragment : BaseFragment() {
             recyclerView.adapter = adapter
             repository.products()
                 .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { list, _ ->
+                .subscribe { list ->
                     run {
                         adapter.setItems(list)
                     }

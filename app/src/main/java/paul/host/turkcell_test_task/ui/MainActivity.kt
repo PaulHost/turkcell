@@ -3,6 +3,7 @@ package paul.host.turkcell_test_task.ui
 import android.os.Bundle
 import paul.host.turkcell_test_task.R
 import paul.host.turkcell_test_task.ui.base.BaseActivity
+import paul.host.turkcell_test_task.ui.fragment.DetailsFragment
 import paul.host.turkcell_test_task.ui.fragment.ListFragment
 
 class MainActivity : BaseActivity() {
@@ -14,5 +15,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (isBackStackEmpty) startFragment(ListFragment.getInstance())
+    }
+
+    override fun goDetails(id: String) {
+        startFragment(DetailsFragment.newInstance(id))
     }
 }
