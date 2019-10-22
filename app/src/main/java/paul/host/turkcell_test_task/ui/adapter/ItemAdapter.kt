@@ -17,26 +17,23 @@ class ItemAdapter(
     private var items: List<Product> = ArrayList()
 ) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_item, parent, false)
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        LayoutInflater.from(parent.context)
+                      .inflate(R.layout.fragment_item, parent, false)
+    )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (items.isNotEmpty()) {
-            val item = items[position]
-            holder.setImage(item.image)
-            holder.name.text = item.name
-            holder.price.text = item.price.toString()
-            holder.itemView.setOnClickListener { listener.goDetails(item.id) }
+        items[position].let { product ->
+            holder.apply {
+                setImage(product.image)
+                name.text = product.name
+                price.text = product.price.toString()
+                itemView.setOnClickListener { listener.goDetails(product.id) }
+            }
         }
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount() = items.size
 
     fun setItems(items: List<Product>) {
         this.items = items
@@ -50,9 +47,9 @@ class ItemAdapter(
 
         fun setImage(url: String) {
             Picasso.get()
-                .load(url)
-                .resize(50, 50)
-                .into(imageView)
+                   .load(url)
+                   .resize(50, 50)
+                   .into(imageView)
         }
     }
 }

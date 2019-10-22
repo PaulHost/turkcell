@@ -16,7 +16,6 @@ import paul.host.turkcell_test_task.common.util.NetworkUtil
 import timber.log.Timber
 import javax.inject.Inject
 
-@Suppress("DEPRECATION")
 class ConnectionDataSource @Inject constructor(private val app: Application) {
 
     private var receiver: BroadcastReceiver? = null

@@ -8,16 +8,18 @@ import paul.host.turkcell_test_task.ui.fragment.ListFragment
 
 class MainActivity : BaseActivity() {
 
-    override val container: Int
-        get() = R.id.container
+    override val container: Int = R.id.container
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        savedInstanceState?.let {
+            it.get("")
+        } ?: startFragment(ListFragment.getInstance())
         setContentView(R.layout.activity_main)
-        if (isBackStackEmpty) startFragment(ListFragment.getInstance())
     }
 
     override fun goDetails(id: String) {
-        startFragment(DetailsFragment.newInstance(id))
+        startFragment(DetailsFragment.getInstance(id))
     }
+
 }

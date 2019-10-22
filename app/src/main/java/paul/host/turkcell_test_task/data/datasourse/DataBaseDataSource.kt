@@ -11,4 +11,9 @@ class DataBaseDataSource @Inject constructor(private val dao: ProductDao) {
 
     fun product(id: String): Flowable<Product> = dao.product(id).doOnError { Timber.e(it) }
 
+    fun saveProducts(products: List<Product>) {
+        if (products.isNotEmpty()) dao.insert(products)
+    }
+
+    fun saveProduct(product: Product) = dao.insert(product)
 }

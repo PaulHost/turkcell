@@ -7,15 +7,12 @@ import timber.log.Timber
 class App : Application() {
 
     companion object {
-        lateinit var instans: App
-            private set
         lateinit var component: AppComponent
             private set
     }
 
     override fun onCreate() {
         super.onCreate()
-        instans = this
         component = AppComponent.Initializer.init(app = this)
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())

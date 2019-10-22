@@ -7,8 +7,6 @@ import paul.host.turkcell_test_task.ui.NavigationListener
 
 abstract class BaseActivity : AppCompatActivity(), NavigationListener {
 
-    protected val isBackStackEmpty: Boolean = supportFragmentManager.backStackEntryCount == 0
-
     abstract val container: Int
 
     fun startFragment(fragment: Fragment) {

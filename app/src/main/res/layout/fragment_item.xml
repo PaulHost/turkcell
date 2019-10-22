@@ -11,6 +11,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:contentDescription="@string/simple_image"
+            android:adjustViewBounds="true"
             android:layout_gravity="start"
             app:srcCompat="@android:drawable/stat_notify_error"/>
 

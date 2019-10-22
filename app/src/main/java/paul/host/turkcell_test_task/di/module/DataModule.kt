@@ -26,10 +26,7 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideNetworkDataSource(
-        api: ApiService,
-        dao: ProductDao
-    ) = NetworkDataSourse(api, dao)
+    fun provideNetworkDataSource(api: ApiService) = NetworkDataSourse(api)
 
     @Singleton
     @Provides

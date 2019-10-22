@@ -1,6 +1,5 @@
 package paul.host.turkcell_test_task.ui.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import paul.host.turkcell_test_task.App
 import paul.host.turkcell_test_task.R
+import paul.host.turkcell_test_task.data.model.Product
 import paul.host.turkcell_test_task.data.repasitory.Repository
 import paul.host.turkcell_test_task.ui.base.BaseFragment
 import javax.inject.Inject
@@ -25,11 +25,10 @@ class DetailsFragment : BaseFragment() {
     lateinit var description: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        App.component.inject(this)
         super.onCreate(savedInstanceState)
+        App.component.inject(this)
     }
 
-    @SuppressLint("CheckResult")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_details, container, false)
                 .apply {
@@ -41,36 +40,33 @@ class DetailsFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        arguments?.let { a ->
-            repository.product(a[ID] as String)
+        arguments?.let {
+            repository.product(it[ID] as String)
                       .subscribeOn(Schedulers.io())
                       .unsubscribeOn(Schedulers.io())
                       .observeOn(AndroidSchedulers.mainThread())
-                      .subscribe { product ->
-                          run {
-                              product.let { p ->
-                                  Picasso.get()
-                                      .load(p.image)
-                                      .into(image)
-                                  name.text = p.name
-                                  price.text = p.price.toString()
-                                  p.description.let { description.text = it }
-                              }
-                          }
-                      }
-
+                      .subscribe(
+                          this::setContent,
+                          this::onError
+                      )
         }
+    }
+
+    private fun setContent(content: Product) = content.let { product ->
+        Picasso.get()
+               .load(product.image)
+               .into(image)
+        name.text = product.name
+        price.text = product.price.toString()
+        description.text = product.description
     }
 
     companion object {
         const val ID = "product_id"
 
-        fun newInstance(id: String): DetailsFragment {
-            val instance = DetailsFragment()
-            instance.arguments = Bundle().apply {
-                putString(ID, id)
+        fun getInstance(id: String) = DetailsFragment().apply {
+                arguments?.putString(ID, id)
             }
-            return instance
-        }
     }
+
 }

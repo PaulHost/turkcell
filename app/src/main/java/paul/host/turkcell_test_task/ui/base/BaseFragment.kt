@@ -3,6 +3,7 @@ package paul.host.turkcell_test_task.ui.base
 import android.content.Context
 import android.support.v4.app.Fragment
 import paul.host.turkcell_test_task.ui.NavigationListener
+import timber.log.Timber
 
 abstract class BaseFragment : Fragment() {
     var listener: NavigationListener? = null
@@ -17,5 +18,7 @@ abstract class BaseFragment : Fragment() {
         super.onDetach()
         listener = null
     }
+
+    fun onError(throwable: Throwable) = Timber.e(throwable)
 
 }
