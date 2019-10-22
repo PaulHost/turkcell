@@ -12,10 +12,10 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        savedInstanceState?.let {
-            it.get("")
-        } ?: startFragment(ListFragment.getInstance())
         setContentView(R.layout.activity_main)
+        savedInstanceState?.get("") ?: run {
+            startFragment(ListFragment.getInstance())
+        }
     }
 
     override fun goDetails(id: String) {

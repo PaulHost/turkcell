@@ -1,13 +1,10 @@
 package paul.host.turkcell_test_task.data.repasitory
 
-import android.annotation.SuppressLint
 import io.reactivex.Flowable
 import paul.host.turkcell_test_task.data.datasourse.ConnectionDataSource
 import paul.host.turkcell_test_task.data.datasourse.DataBaseDataSource
 import paul.host.turkcell_test_task.data.datasourse.NetworkDataSourse
 import paul.host.turkcell_test_task.data.model.Product
-import timber.log.Timber
-import java.util.function.BiPredicate
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -16,11 +13,11 @@ class Repository @Inject constructor(
     private val connection: ConnectionDataSource
 ) {
 
-    fun products(): Flowable<List<Product>> = db.products().doAfterNext{
+    fun products(): Flowable<List<Product>> = db.products().switchIfEmpty{
         apiProducts().subscribe()
     }
 
-    fun product(id: String) = db.product(id).doAfterNext{
+    fun product(id: String): Flowable<Product> = db.product(id).switchIfEmpty{
         apiProduct(id).subscribe()
     }
 
@@ -31,7 +28,7 @@ class Repository @Inject constructor(
         if (it) api.product(id)
                    .toFlowable()
                    .doOnNext(db::saveProduct)
-        else product(id)
+        else Flowable.empty()
     }
 
     private fun apiProducts(): Flowable<List<Product>> = hasConnection().flatMap {
@@ -40,7 +37,7 @@ class Repository @Inject constructor(
                .toFlowable()
                .doOnNext(db::saveProducts)
         } else {
-            Flowable.just(listOf())
+            Flowable.empty()
         }
     }
 
