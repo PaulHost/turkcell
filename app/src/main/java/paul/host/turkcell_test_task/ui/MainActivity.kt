@@ -13,7 +13,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        savedInstanceState?.get("") ?: run {
+        savedInstanceState ?: run {
             startFragment(ListFragment.getInstance())
         }
     }

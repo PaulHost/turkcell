@@ -13,23 +13,19 @@ class Repository @Inject constructor(
     private val connection: ConnectionDataSource
 ) {
 
-    fun products(): Flowable<List<Product>> = db.products().switchIfEmpty{
-        apiProducts().subscribe()
+    fun products(): Flowable<List<Product>> = db.products().flatMap {
+        if (it.isEmpty()) apiProducts() else Flowable.just(it)
     }
 
-    fun product(id: String): Flowable<Product> = db.product(id).switchIfEmpty{
-        apiProduct(id).subscribe()
+    fun product(id: String): Flowable<Product> = hasConnection().flatMap {
+        if (it) api.product(id)
+                   .toFlowable()
+                   .doOnNext(db::saveProduct)
+        else db.product(id)
     }
 
     private fun hasConnection() = connection.hasConnection()
                                             .distinctUntilChanged()
-
-    private fun apiProduct(id: String): Flowable<Product> = hasConnection().flatMap {
-        if (it) api.product(id)
-                   .toFlowable()
-                   .doOnNext(db::saveProduct)
-        else Flowable.empty()
-    }
 
     private fun apiProducts(): Flowable<List<Product>> = hasConnection().flatMap {
         if (it) {
